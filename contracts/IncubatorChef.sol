@@ -163,7 +163,7 @@ contract IncubatorChef is Ownable, ReentrancyGuard, IIncubatorChef  {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 kswapReward = multiplier.mul(goosePerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+        uint256 kswapReward = multiplier.mul(kswapPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
         kswap.mint(devAddress, kswapReward.div(10));
         kswap.mint(address(this), kswapReward);
         pool.accKswapPerShare = pool.accKswapPerShare.add(kswapReward.mul(1e12).div(lpSupply));
@@ -238,7 +238,7 @@ contract IncubatorChef is Ownable, ReentrancyGuard, IIncubatorChef  {
         uint256 kswapBal = kswap.balanceOf(address(this));
         bool transferSuccess = false;
         if (_amount > kswapBal) {
-            transferSuccess = kswap.transfer(_to, gooseBal);
+            transferSuccess = kswap.transfer(_to, kswapBal);
         } else {
             transferSuccess = kswap.transfer(_to, _amount);
         }
