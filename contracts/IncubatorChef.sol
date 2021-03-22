@@ -26,7 +26,7 @@ contract IncubatorChef is Ownable, ReentrancyGuard, IIncubatorChef  {
         //   pending reward = (user.amount * pool.accKswapPerShare) - user.rewardDebt
         //
         // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accGoosePerShare` (and `lastRewardBlock`) gets updated.
+        //   1. The pool's `accKswapPerShare` (and `lastRewardBlock`) gets updated.
         //   2. User receives the pending reward sent to his/her address.
         //   3. User's `amount` gets updated.
         //   4. User's `rewardDebt` gets updated.
@@ -233,7 +233,7 @@ contract IncubatorChef is Ownable, ReentrancyGuard, IIncubatorChef  {
         emit EmergencyWithdraw(msg.sender, _pid, amount);
     }
 
-    // Safe goose transfer function, just in case if rounding error causes pool to not have enough KSWAPs.
+    // Safe kswap transfer function, just in case if rounding error causes pool to not have enough KSWAPs.
     function safeKswapTransfer(address _to, uint256 _amount) internal {
         uint256 kswapBal = kswap.balanceOf(address(this));
         bool transferSuccess = false;
