@@ -20,7 +20,7 @@ contract FeeProcessor is Ownable, ReentrancyGuard, BscConstants, IFeeProcessor {
 
     address public schedulerAddr;
     address public feeHolder;
-    IBEP20 public gooseToken;
+    IBEP20 public kswapToken;
     IBEP20 public houseToken;
     IHouseChef public houseChef;
     IIncubatorChef public incubatorChef;
@@ -42,7 +42,7 @@ contract FeeProcessor is Ownable, ReentrancyGuard, BscConstants, IFeeProcessor {
 
     constructor(
         address _schedulerAddr,
-        address _gooseToken,
+        address _kswapToken,
         address _houseChef,
         address _houseToken,
         address _feeHolder,
@@ -50,7 +50,7 @@ contract FeeProcessor is Ownable, ReentrancyGuard, BscConstants, IFeeProcessor {
         uint16 _houseShareBP
     ) public {
         schedulerAddr = _schedulerAddr;
-        gooseToken = IBEP20(_gooseToken);
+        kswapToken = IBEP20(_kswapToken);
         houseChef = IHouseChef(_houseChef);
         houseToken = IBEP20(_houseToken);
         feeHolder = _feeHolder;
@@ -71,8 +71,8 @@ contract FeeProcessor is Ownable, ReentrancyGuard, BscConstants, IFeeProcessor {
             paths[autoAddr][busdAddr] = [autoAddr, wbnbAddr, busdAddr];
             paths[adaAddr][busdAddr] = [adaAddr, wbnbAddr, busdAddr];
 
-            //Buy Goose Path
-            paths[busdAddr][address(gooseToken)] = [busdAddr, address(gooseToken)];
+            //Buy Kswap Path
+            paths[busdAddr][address(kswapToken)] = [busdAddr, address(kswapToken)];
         }
     }
 
@@ -129,8 +129,8 @@ contract FeeProcessor is Ownable, ReentrancyGuard, BscConstants, IFeeProcessor {
             payGasTax();
         }
 
-        //All EGGs coming in gets burned
-        if (address(token) == eggAddr) {
+        //All KSTs coming in gets burned
+        if (address(token) == kstAddr) {
             burnTokens(token);
             return true;
         }
@@ -164,9 +164,9 @@ contract FeeProcessor is Ownable, ReentrancyGuard, BscConstants, IFeeProcessor {
             swapTokens(buybackAmount, token, IBEP20(busdAddr));
             finalAmount = IBEP20(busdAddr).balanceOf(address(this)).sub(startAmount);
         }
-        swapTokens(finalAmount, IBEP20(busdAddr), gooseToken);
-        //Burn all goose tokens
-        burnTokens(gooseToken);
+        swapTokens(finalAmount, IBEP20(busdAddr), kswapToken);
+        //Burn all kswap tokens
+        burnTokens(kswapToken);
 
         emit ProcessFees(msg.sender, address(token), balance);
         return true;
