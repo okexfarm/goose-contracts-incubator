@@ -48,7 +48,7 @@ contract IncubatorChef is Ownable, ReentrancyGuard, IIncubatorChef  {
     // Dev address.
     address public devAddress;
     // KSWAP tokens created per block.
-    uint256 public goosePerBlock;
+    uint256 public kswapPerBlock;
     // Bonus multiplier for early kswap makers.
     uint256 public constant BONUS_MULTIPLIER = 1;
     // Deposit Fee address
@@ -69,13 +69,13 @@ contract IncubatorChef is Ownable, ReentrancyGuard, IIncubatorChef  {
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event SetFeeAddress(address indexed user, address indexed newAddress);
     event SetDevAddress(address indexed user, address indexed newAddress);
-    event UpdateEmissionRate(address indexed user, uint256 goosePerBlock);
+    event UpdateEmissionRate(address indexed user, uint256 kswapPerBlock);
 
     constructor(
         IMintable _kswap,
         address _devAddress,
         address _feeAddress,
-        uint256 _goosePerBlock,
+        uint256 _kswapPerBlock,
         uint256 _startBlock
     ) public {
         kswap = _kswap;
@@ -163,7 +163,7 @@ contract IncubatorChef is Ownable, ReentrancyGuard, IIncubatorChef  {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 gooseReward = multiplier.mul(goosePerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+        uint256 kswapReward = multiplier.mul(goosePerBlock).mul(pool.allocPoint).div(totalAllocPoint);
         kswap.mint(devAddress, kswapReward.div(10));
         kswap.mint(address(this), kswapReward);
         pool.accKswapPerShare = pool.accKswapPerShare.add(kswapReward.mul(1e12).div(lpSupply));
