@@ -11,17 +11,17 @@ contract IncubatorChefFactory is IIncubatorChefFactory, Ownable {
 
     function createNewIncubatorChef(
         uint256 layerId,
-        IMintable goose,
+        IMintable kswap,
         address devaddr,
         address feeAddress,
-        uint256 goosePerBlock,
+        uint256 kswapPerBlock,
         uint256 startBlock
     ) override external onlyOwner returns (IIncubatorChef){
         IncubatorChef chef = new IncubatorChef{salt : bytes32(layerId)}(
-            goose,
+            kswap,
             devaddr,
             feeAddress,
-            goosePerBlock,
+            kswapPerBlock,
             startBlock
         );
         Ownable(chef).transferOwnership(msg.sender);
