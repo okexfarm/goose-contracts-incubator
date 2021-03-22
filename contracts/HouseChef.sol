@@ -21,7 +21,7 @@ contract HouseChef is Ownable, ReentrancyGuard, IHouseChef, BscConstants {
         uint256 amount;         // How many LP tokens the user has provided.
         uint256 rewardDebt;     // Reward debt. See explanation below.
         //
-        // We do some fancy math here. Basically, any point in time, the amount of GOOSEs
+        // We do some fancy math here. Basically, any point in time, the amount of KSWAPs
         // entitled to a user but is pending to be distributed is:
         //
         //   pending reward = (user.amount * pool.accRewardPerShare) - user.rewardDebt
@@ -36,7 +36,7 @@ contract HouseChef is Ownable, ReentrancyGuard, IHouseChef, BscConstants {
     // Info of each pool.
     struct PoolInfo {
         IBEP20 lpToken;                 // Address of LP token contract.
-        uint256 allocPoint;             // How many allocation points assigned to this pool. GOOSEs to distribute per block.
+        uint256 allocPoint;             // How many allocation points assigned to this pool. KSWAPs to distribute per block.
         uint256 lastRewardBlock;        // Last block number that reward distribution occurs.
         uint256 accRewardPerShare;       // Accumulated reward per share, times 1e12. See below.
         uint256 currentDepositAmount;   // Current total deposit amount in this pool
@@ -89,7 +89,7 @@ contract HouseChef is Ownable, ReentrancyGuard, IHouseChef, BscConstants {
     }
 
     // View function to see pending rewards on frontend.
-    function pendingGoose(address _user) external view returns (uint256) {
+    function pendingKswap(address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[0];
         UserInfo storage user = userInfo[_user];
         uint256 accRewardPerShare = pool.accRewardPerShare;
@@ -139,7 +139,7 @@ contract HouseChef is Ownable, ReentrancyGuard, IHouseChef, BscConstants {
         rewardToken.safeTransferFrom(address(msg.sender), address(this), _amount);
     }
 
-    // Deposit LP tokens to Chef for GOOSE allocation.
+    // Deposit LP tokens to Chef for KSWAP allocation.
     function deposit(uint256 _amount) public nonReentrant {
         PoolInfo storage pool = poolInfo[0];
         UserInfo storage user = userInfo[msg.sender];
@@ -190,7 +190,7 @@ contract HouseChef is Ownable, ReentrancyGuard, IHouseChef, BscConstants {
         emit EmergencyWithdraw(msg.sender, amount);
     }
 
-    // Safe goose transfer function, just in case if rounding error causes pool to not have enough GOOSEs.
+    // Safe kswap transfer function, just in case if rounding error causes pool to not have enough KSWAPs.
     function safeRewardTransfer(address _to, uint256 _amount) internal {
         uint256 balance = rewardToken.balanceOf(address(this));
         uint256 transferAmount = Math.min(balance, _amount);
